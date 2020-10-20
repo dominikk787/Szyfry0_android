@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Szyfry0</string>
+    <string name="btnCMorse_name">Koduj morse\'a</string>
+    <string name="btnDMorse_name">Dekoduj morse\'a</string>
+    <string name="btnPlayfair_name">Szyfr Playfaira</string>
+    <string name="cmorse_hint">Tekst do zakodowania</string>
+    <string name="middle_dot_str">•</string>
+    <string name="line_str">-</string>
+    <string name="slash_str">/</string>
+    <string name="back_str"><![CDATA[<-]]></string>
+    <string name="none_str" />
+</resources>
