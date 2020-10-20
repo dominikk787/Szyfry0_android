@@ -19,5 +19,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, DMorseActivity::class.java)
             startActivity(intent)
         }
+
+        btnPlayfair.setOnClickListener {
+            val intent = Intent(this, PlayfairActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
