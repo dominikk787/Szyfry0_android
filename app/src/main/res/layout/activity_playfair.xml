@@ -6,4 +6,68 @@
     android:layout_height="match_parent"
     tools:context=".PlayfairActivity">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:theme="@style/spinnerStyle">
+
+            <Spinner
+                android:id="@+id/spnKeyP"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:entries="@array/available_keys"
+                android:spinnerMode="dialog" />
+
+            <ToggleButton
+                android:id="@+id/toggleDirP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="false"
+                android:ems="5"
+                android:textOff="@string/encrypt_str"
+                android:textOn="@string/decrypt_str" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="?android:attr/listDivider" />
+
+        <EditText
+            android:id="@+id/inTextP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="@string/data_process_hint"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine" />
+
+        <EditText
+            android:id="@+id/outTextP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="@string/none_str"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
