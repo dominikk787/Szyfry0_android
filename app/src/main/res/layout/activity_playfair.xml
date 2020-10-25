@@ -68,6 +68,7 @@
             android:gravity="start|top"
             android:hint="@string/none_str"
             android:importantForAutofill="no"
-            android:inputType="textMultiLine" />
+            android:inputType="none"
+            android:textIsSelectable="true"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

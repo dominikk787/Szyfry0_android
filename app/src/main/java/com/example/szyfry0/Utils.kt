@@ -9,3 +9,9 @@ fun String.toLatin(): String {
         if (index >= 0) normalized[index] else char
     }.joinToString("")
 }
+
+fun Int.modulo(other: Int): Int {
+    var m = this.rem(other)
+    if(m < 0) m += other
+    return m
+}
