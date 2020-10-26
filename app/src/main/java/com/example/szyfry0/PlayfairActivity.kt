@@ -82,11 +82,11 @@ class PlayfairActivity : AppCompatActivity() {
         }
         btnSelKeyP.setOnClickListener {
             val builder = AlertDialog.Builder(this)
-            var dialog: AlertDialog? = null
+            lateinit var dialog: AlertDialog
+            lateinit var viewAdapter: MyKeyAdapter
             val inflater = this.layoutInflater
             val v = inflater.inflate(R.layout.dialog_playfair_select_key, null)
-            val viewManager = LinearLayoutManager(this)
-            val viewAdapter = MyKeyAdapter(this, listKeys, KeyListItem(-2, getString(R.string.new_key)), KeyListItem(-1, ""),
+            viewAdapter = MyKeyAdapter(this, listKeys, KeyListItem(-2, getString(R.string.new_key)), KeyListItem(-1, ""),
                 object : MyKeyAdapter.MyItemClicksListener {
                     override fun onClickListener(view: View, pos: Int, item: KeyListItem) {
                         when(item.id) {
@@ -104,31 +104,40 @@ class PlayfairActivity : AppCompatActivity() {
                                 updatePlayfair()
                             }
                         }
-                        dialog?.dismiss()
+                        dialog.dismiss()
                     }
                     override fun onButtonClickListener(view: View, pos: Int, item: KeyListItem) {
                         println("button click $view at $pos on $item")
-                        val build = AlertDialog.Builder(ContextThemeWrapper(this@PlayfairActivity, android.R.style.Theme_Material_Dialog_Alert))
+                        val build = AlertDialog.Builder(ContextThemeWrapper(this@PlayfairActivity, R.style.AlertDialogTheme))
                         build.apply {
                             setPositiveButton("Edytuj") { dialogInterface, i ->
                                 println("edit key $item $dialogInterface $i")
-                                dialog?.dismiss()
+                                dialog.dismiss()
+                                val intent = Intent(this@PlayfairActivity, PlayfairKeyActivity::class.java)
+                                intent.putExtra("Id", item.id)
+                                intent.putExtra("KeyName", item.name)
+                                intent.putExtra("Alphabet", item.abId)
+                                intent.putExtra("KeyV", item.key)
+                                startActivityForResult(intent, 1)
                             }
                             setNegativeButton("Usuń") { dialogInterface, i ->
                                 println("delete key $item $dialogInterface $i")
-                                dialog?.dismiss()
+                                dbHelper?.deleteKey(item.id)
+                                genKeyList()
+                                dialog.dismiss()
+                                btnSelKeyP.callOnClick()
                             }
                             setNeutralButton("Anuluj") { dialogInterface, i ->
                                 println("cancel key $item $dialogInterface $i")
                             }
-                            setTitle("Zmień klucz")
+                            setTitle(item.name)
                         }
                         build.create().show()
                     }
                 })
             v.recyclerPD.apply {
                 setHasFixedSize(true)
-                layoutManager = viewManager
+                layoutManager = LinearLayoutManager(this@PlayfairActivity)
                 adapter = viewAdapter
             }
             builder.setView(v).setTitle("Wybierz klucz")
@@ -147,7 +156,7 @@ class PlayfairActivity : AppCompatActivity() {
         if(requestCode == 1) {
             println("result key ${data?.getStringExtra("KeyName")} ${data?.getIntExtra("Alphabet", 0)} ${data?.getStringExtra("KeyV")}")
             if(resultCode == 1 && data != null && data.hasExtra("KeyName") && data.hasExtra("Alphabet") && data.hasExtra("KeyV")) {
-                val key = KeyListItem(listKeys[listKeys.size - 2].id + 1,
+                val key = KeyListItem(0,
                     data.getStringExtra("KeyName") ?: "",
                     data.getIntExtra("Alphabet", 0),
                     data.getStringExtra("KeyV") ?: "")

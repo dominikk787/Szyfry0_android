@@ -80,7 +80,7 @@ class PlayfairKeyActivity : AppCompatActivity() {
             val intent = Intent()
             intent.putExtra("KeyName", editNamePK.text.toString().toUpperCase(Locale.getDefault()))
             intent.putExtra("Alphabet", spnAbPK.selectedItemId.toInt())
-            intent.putExtra("KeyV", Playfair.Key.get())
+            intent.putExtra("KeyV", editKeyPK.text.toString())
             if(id >= 0) intent.putExtra("Id", id)
             setResult(1, intent)
             finish()

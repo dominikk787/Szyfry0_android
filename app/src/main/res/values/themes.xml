@@ -16,4 +16,9 @@
     <style name="spinnerStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textSize">18sp</item>
     </style>
+
+    <style name="AlertDialogTheme" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="colorOnPrimary">?attr/colorOnBackground</item>
+    </style>
 </resources>
