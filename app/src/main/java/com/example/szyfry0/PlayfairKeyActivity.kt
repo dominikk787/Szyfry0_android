@@ -17,7 +17,7 @@ class PlayfairKeyActivity : AppCompatActivity() {
     class CharAdapter(private val c: Context) : BaseAdapter() {
         override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
             val inflater = c.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val v = p1 ?: inflater.inflate(R.layout.layout_playfair_key_grid, null)
+            val v = p1 ?: inflater.inflate(R.layout.layout_playfair_key_grid, p2, false)
             v.textV.text = getItem(p0) as String
             return v
         }
@@ -31,9 +31,21 @@ class PlayfairKeyActivity : AppCompatActivity() {
             return (Playfair.Key.getAlphabet().size) * (Playfair.Key.getAlphabet().size)
         }
     }
+
+    var id: Int = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_playfair_key)
+
+        val extras = intent.extras
+        if(extras != null) {
+            id = extras.getInt("Id", -1)
+            spnAbPK.setSelection(extras.getInt("Alphabet", 0))
+            editNamePK.setText(extras.getString("KeyName", ""))
+            editKeyPK.setText(extras.getString("KeyV", ""))
+        }
+
         fun onKeyChange() {
             println("test")
             val id = spnAbPK.selectedItemId
@@ -69,6 +81,7 @@ class PlayfairKeyActivity : AppCompatActivity() {
             intent.putExtra("KeyName", editNamePK.text.toString().toUpperCase(Locale.getDefault()))
             intent.putExtra("Alphabet", spnAbPK.selectedItemId.toInt())
             intent.putExtra("KeyV", Playfair.Key.get())
+            if(id >= 0) intent.putExtra("Id", id)
             setResult(1, intent)
             finish()
         }

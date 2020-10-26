@@ -22,21 +22,32 @@
             android:orientation="horizontal"
             android:theme="@style/spinnerStyle">
 
-            <Spinner
-                android:id="@+id/spnKeyP"
+            <TextView
+                android:id="@+id/textKeyNameP"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="10"
-                android:entries="@array/available_keys"
-                android:spinnerMode="dialog" />
+                android:layout_weight="20"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/btnSelKeyP"
+                style="@android:style/Widget.DeviceDefault.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:backgroundTint="#00FFFFFF"
+                android:minWidth="48dp"
+                android:text="\u25BD"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
 
             <ToggleButton
                 android:id="@+id/toggleDirP"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:checked="false"
-                android:ems="5"
+                android:maxEms="10"
                 android:textOff="@string/encrypt_str"
                 android:textOn="@string/decrypt_str" />
 
