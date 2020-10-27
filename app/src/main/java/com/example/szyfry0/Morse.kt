@@ -1,5 +1,7 @@
 package com.example.szyfry0
 
+import java.util.*
+
 object Morse {
     private val morse_codes = mapOf('a' to ".-", 'b' to "-...", 'c' to "-.-.", 'd' to "-..",
         'e' to ".", 'f' to "..-.", 'g' to "--.", 'h' to "....", 'i' to "..", 'j' to ".---",
@@ -25,11 +27,11 @@ object Morse {
     }
 
     fun encode(string: String) : String {
-        var instr = string.trimIndent()
+        val instr = string.trimIndent()
         println(instr)
-        var outlist = emptyList<String>()
+        val outlist = mutableListOf<String>()
         for(inch in instr) {
-            outlist += (morse_codes[inch]?.toString() ?: "error")
+            outlist.add(morse_codes[inch] ?: "error")
         }
         println(outlist)
         var outstr = outlist.joinToString("/", postfix = "/")
@@ -38,7 +40,7 @@ object Morse {
     }
 
     fun decode(string: String) : String {
-        var instr = string.toLowerCase()
+        var instr = string.toLowerCase(Locale.getDefault())
         instr = instr.replace(' ', '/').replace("/{3,}".toRegex(), "//")
         instr = instr.filter {
             it == '.' || it == '-' || it == '/'

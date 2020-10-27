@@ -8,13 +8,15 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
 import kotlinx.android.synthetic.main.activity_playfair_key.*
 import kotlinx.android.synthetic.main.layout_playfair_key_grid.view.*
 import java.util.*
 
 class PlayfairKeyActivity : AppCompatActivity() {
-    class CharAdapter(private val c: Context) : BaseAdapter() {
+    private val key = Playfair.Key()
+    class CharAdapter(private val c: Context, private val key: Playfair.Key) : BaseAdapter() {
         override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
             val inflater = c.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val v = p1 ?: inflater.inflate(R.layout.layout_playfair_key_grid, p2, false)
@@ -22,13 +24,13 @@ class PlayfairKeyActivity : AppCompatActivity() {
             return v
         }
         override fun getItem(p0: Int): Any? {
-            return Playfair.Key.get(p0.rem(Playfair.Key.getAlphabet().size), p0 / (Playfair.Key.getAlphabet().size)).toString()
+            return key.get(p0.rem(key.getAlphabet().size), p0 / (key.getAlphabet().size)).toString()
         }
         override fun getItemId(p0: Int): Long {
             return p0.toLong()
         }
         override fun getCount(): Int {
-            return (Playfair.Key.getAlphabet().size) * (Playfair.Key.getAlphabet().size)
+            return (key.getAlphabet().size) * (key.getAlphabet().size)
         }
     }
 
@@ -37,6 +39,8 @@ class PlayfairKeyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_playfair_key)
+
+        spnAbPK.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, resources.getStringArray(R.array.playfair_alphabets))
 
         val extras = intent.extras
         if(extras != null) {
@@ -50,10 +54,10 @@ class PlayfairKeyActivity : AppCompatActivity() {
             println("test")
             val id = spnAbPK.selectedItemId
             println(id)
-            Playfair.Key.setAlphabet(id.toInt())
-            Playfair.Key.setKey(editKeyPK.text.toString())
-            gridKeyPK.numColumns = Playfair.Key.getAlphabet().size
-            gridKeyPK.adapter = CharAdapter(this)
+            key.setAlphabet(id.toInt())
+            key.setKey(editKeyPK.text.toString())
+            gridKeyPK.numColumns = key.getAlphabet().size
+            gridKeyPK.adapter = CharAdapter(this, key)
         }
         spnAbPK.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {

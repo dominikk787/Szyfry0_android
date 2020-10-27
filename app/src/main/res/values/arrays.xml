@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="playfair_alphabets">
+        <item>Podstawowy alfabet bez \'j\'</item>
+        <item>Rozszerzony alfabet z cyframi</item>
+        <item>Rozszerzony alfabet z cyframi i symbolami</item>
+    </string-array>
+</resources>

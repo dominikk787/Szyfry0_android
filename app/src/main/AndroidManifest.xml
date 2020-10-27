@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Szyfry0">
-        <activity android:name=".PlayfairKeyActivity" android:parentActivityName=".PlayfairActivity"/>
+        <activity
+            android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".PlayfairKeyActivity"
+            android:parentActivityName=".PlayfairActivity" />
         <activity
             android:name=".PlayfairActivity"
             android:parentActivityName=".MainActivity" />

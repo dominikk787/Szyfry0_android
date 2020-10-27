@@ -1,0 +1,16 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Morse">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="morse_copy_unicode"
+            android:summaryOff="Gorszy wygląd, krótki tekst"
+            android:summaryOn="Lepiej wygląda, dłuższy tekst"
+            android:title="Kopiuj jako Unicode" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Szyfr Playfaira">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="playfair_dev"
+            android:title="Tryb deweloperski" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -7,9 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
 import android.provider.BaseColumns._ID
 
-data class KeyListItem(var id: Int, var name: String, var abId: Int = -1, val key: String = "") {
-    //override fun toString(): String = name
-}
+data class KeyListItem(var id: Int, var name: String, var abId: Int = -1, val key: String = "")
 
 class PlayfairDBHelper(context: Context) : SQLiteOpenHelper(context, TABLE_NAME, null, TABLE_VERSION) {
     companion object : BaseColumns {
@@ -38,14 +36,15 @@ class PlayfairDBHelper(context: Context) : SQLiteOpenHelper(context, TABLE_NAME,
         onCreate(db)
     }
 
-    fun addKey(key: KeyListItem) {
+    fun addKey(key: KeyListItem): Long {
         val values = ContentValues()
         values.put(COLUMN_NAME_KEYNAME, key.name)
         values.put(COLUMN_NAME_ALPHABET, key.abId)
         values.put(COLUMN_NAME_KEYV, key.key)
         val db = this.writableDatabase
-        db.insert(TABLE_NAME, null, values)
+        val id = db.insert(TABLE_NAME, null, values)
         db.close()
+        return id
     }
     fun updateKey(key: KeyListItem) {
         val values = ContentValues()

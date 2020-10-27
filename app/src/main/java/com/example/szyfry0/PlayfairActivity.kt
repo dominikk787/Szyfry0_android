@@ -1,18 +1,17 @@
 package com.example.szyfry0
 
 import android.app.AlertDialog
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.ContextThemeWrapper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_playfair.*
@@ -24,28 +23,33 @@ class PlayfairActivity : AppCompatActivity() {
 
     private var dbHelper: PlayfairDBHelper? = null
     private var listKeys = listOf<KeyListItem>()
+    private var selectedItemId = -1
+    private var devMode = false
 
     private fun updatePlayfair() {
-        outTextP.setText(Playfair.crypt(inTextP.text.toString(), toggleDirP.isChecked))
+        if(selectedItemId >= 0) {
+            var text = Playfair.crypt(inTextP.text.toString(), toggleDirP.isChecked)
+            if(devMode) {
+                text += "\n\n"
+                text += if(toggleDirP.isChecked) Playfair.crypt(inTextP.text.toString(), toggleDirP.isChecked, false)
+                        else Playfair.key.getAlphabet().trim(inTextP.text.toString(), !toggleDirP.isChecked)
+            }
+            outTextP.setText(text)
+        } else outTextP.setText("")
     }
 
     class MyKeyAdapter(private val context: Context, var list: List<KeyListItem>, private val new_key: KeyListItem,
                        private val dummy_key: KeyListItem, private val listener: MyItemClicksListener? = null) : RecyclerView.Adapter<MyKeyAdapter.MyKeyViewHolder>() {
         data class MyKeyViewHolder(val view: View, val textView: TextView, val button: Button, val div: View, var pos: Int) : RecyclerView.ViewHolder(view)
 
-        override fun getItemCount(): Int {
-            return max(list.size + 1, 2)
-        }
-        private fun getItem(pos: Int): KeyListItem {
-            return if(list.isEmpty() && pos == 0) dummy_key
-                    else if(pos >= list.size) new_key
-                    else list[pos]
-        }
+        override fun getItemCount(): Int = max(list.size + 1, 2)
+        private fun getItem(pos: Int): KeyListItem = if(list.isEmpty() && pos == 0) dummy_key
+                                                        else if(pos >= list.size) new_key
+                                                        else list[pos]
         override fun onBindViewHolder(holder: MyKeyViewHolder, position: Int) {
             holder.pos = position
             holder.textView.text = getItem(position).name
             holder.view.setOnClickListener { listener?.onClickListener(it, position, getItem(position)) }
-            //holder.view.setOnLongClickListener { listener?.onLongClickListener(it, position, getItem(position)) ?: false}
             if(getItem(position).id >= 0) holder.button.setOnClickListener { listener?.onButtonClickListener(it, position, getItem(position)) }
             else holder.button.visibility = View.INVISIBLE
             if(position == 0) holder.div.visibility = View.INVISIBLE
@@ -58,7 +62,6 @@ class PlayfairActivity : AppCompatActivity() {
 
         interface MyItemClicksListener {
             fun onClickListener(view: View, pos: Int, item: KeyListItem)
-            //fun onLongClickListener(view: View, pos: Int, item: KeyListItem): Boolean
             fun onButtonClickListener(view: View, pos: Int, item: KeyListItem)
         }
     }
@@ -68,6 +71,9 @@ class PlayfairActivity : AppCompatActivity() {
         setContentView(R.layout.activity_playfair)
 
         dbHelper = PlayfairDBHelper(this)
+
+        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        devMode = preferences.getBoolean("playfair_dev", false)
 
         genKeyList()
         inTextP.addTextChangedListener(object : TextWatcher {
@@ -90,8 +96,9 @@ class PlayfairActivity : AppCompatActivity() {
                 object : MyKeyAdapter.MyItemClicksListener {
                     override fun onClickListener(view: View, pos: Int, item: KeyListItem) {
                         when(item.id) {
-                            -1->{
+                            -1 -> {
                                 textKeyNameP.text = item.name
+                                selectedItemId = item.id
                             }
                             -2 -> {
                                 val intent = Intent(this@PlayfairActivity, PlayfairKeyActivity::class.java)
@@ -99,8 +106,9 @@ class PlayfairActivity : AppCompatActivity() {
                             }
                             in 0..Int.MAX_VALUE -> {
                                 textKeyNameP.text = item.name
-                                Playfair.Key.setAlphabet(item.abId)
-                                Playfair.Key.setKey(item.key)
+                                Playfair.key.setAlphabet(item.abId)
+                                Playfair.key.setKey(item.key)
+                                selectedItemId = item.id
                                 updatePlayfair()
                             }
                         }
@@ -164,15 +172,37 @@ class PlayfairActivity : AppCompatActivity() {
                     key.id = data.getIntExtra("Id", 0)
                     dbHelper?.updateKey(key)
                 } else {
-                    dbHelper?.addKey(key)
+                    key.id = dbHelper?.addKey(key)?.toInt() ?: 0
                 }
                 genKeyList()
                 println("result ${listKeys.size} ${key.id} ${key.name} ${key.key}")
-                Playfair.Key.setAlphabet(key.abId)
-                Playfair.Key.setKey(key.key)
+                Playfair.key.setAlphabet(key.abId)
+                Playfair.key.setKey(key.key)
                 textKeyNameP.text = key.name
+                selectedItemId = key.id
                 updatePlayfair()
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_copy, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.menuCopyS && selectedItemId >= 0) {
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            clipboard.setPrimaryClip(ClipData.newPlainText("Playfair", Playfair.crypt(inTextP.text.toString(), toggleDirP.isChecked)))
+            Toast.makeText(this, R.string.copy_toast, Toast.LENGTH_SHORT).show()
+        } else if(item.itemId == R.id.menuPasteS) {
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val text = clipboard.primaryClip?.getItemAt(0)?.text?.toString()
+            if(text != null && text.isNotEmpty()) {
+                inTextP.setText(text)
+                updatePlayfair()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

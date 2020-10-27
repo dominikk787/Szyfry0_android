@@ -4,26 +4,23 @@
     <string name="btnDMorse_name">Dekoduj morse\'a</string>
     <string name="btnPlayfair_name">Szyfr Playfaira</string>
     <string name="cmorse_hint">Tekst do zakodowania</string>
-    <string name="middle_dot_str">•</string>
-    <string name="line_str">-</string>
-    <string name="slash_str">/</string>
-    <string name="back_str"><![CDATA[<-]]></string>
-    <string name="none_str" />
-    <string-array name="playfair_alphabets">
-        <item>Podstawowy alfabet bez \'j\'</item>
-        <item>Rozszerzony alfabet z cyframi</item>
-        <item>Rozszerzony alfabet z cyframi i symbolami</item>
-    </string-array>
-    <string name="new_key">NOWY KLUCZ</string>
-    <string-array name="available_keys">
-        <item>test 0</item>
-        <item>test 1</item>
-        <item>@string/new_key</item>
-    </string-array>
     <string name="save">Zapisz</string>
     <string name="name_key">Nazwa klucza</string>
     <string name="key">Klucz</string>
     <string name="encrypt_str">Szyfruj</string>
     <string name="decrypt_str">Deszyfruj</string>
     <string name="data_process_hint">Dane do przetworzenia</string>
+    <string name="copy">Kopiuj</string>
+    <string name="paste">Wklej</string>
+    <string name="copy_toast">Skopiowano do schowka</string>
+    <string name="settings_str">Ustawienia</string>
+
+    <string name="middle_dot_str">•</string>
+    <string name="line_str">-</string>
+    <string name="slash_str">/</string>
+    <string name="back_str"><![CDATA[<-]]></string>
+    <string name="none_str" />
+    <string name="triangle_str">▽</string>
+    <string name="hamburger_str">≡</string>
+    <string name="new_key">NOWY KLUCZ</string>
 </resources>
