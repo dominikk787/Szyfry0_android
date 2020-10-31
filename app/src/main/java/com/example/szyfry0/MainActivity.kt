@@ -5,14 +5,24 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_playfair_key.*
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val array = resources.obtainTypedArray(R.array.test_array)
+        if(array.length() > 0) {
+            val id = array.getResourceId(0, 0)
+            if(id > 0) {
+                val str = resources.getString(id)
+                val text = "id: $id\nstr: $str"
+                Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+                println(text)
+            }
+        }
 
         btnCMorse.setOnClickListener {
             val intent = Intent(this, CMorseActivity::class.java)
@@ -38,6 +48,9 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.menuSettingM) {
             val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        } else if(item.itemId == R.id.menuOthersM) {
+            val intent = Intent(this, OthersActivity::class.java)
             startActivity(intent)
         }
         return super.onOptionsItemSelected(item)

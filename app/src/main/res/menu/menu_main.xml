@@ -3,7 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/menuOthersM"
+        android:title="@string/inne_szyfry_str" />
+    <item
         android:id="@+id/menuSettingM"
-        android:title="@string/settings_str"
-        app:showAsAction="ifRoom" />
+        android:title="@string/settings_str"/>
 </menu>

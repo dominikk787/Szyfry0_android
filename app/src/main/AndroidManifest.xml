@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Szyfry0">
+        <activity android:name=".OthersActivity"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SettingsActivity"
             android:parentActivityName=".MainActivity" />

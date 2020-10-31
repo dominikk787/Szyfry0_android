@@ -4,4 +4,7 @@
         <item>Rozszerzony alfabet z cyframi</item>
         <item>Rozszerzony alfabet z cyframi i symbolami</item>
     </string-array>
+    <array name="test_array">
+        <item>@string/test2</item>
+    </array>
 </resources>
